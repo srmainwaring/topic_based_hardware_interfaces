@@ -14,6 +14,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   angles
   rclcpp
   hardware_interface
+  geometry_msgs
   sensor_msgs
 )
 
@@ -86,6 +87,11 @@ if(BUILD_TESTING)
     ${std_msgs_TARGETS}
     rclcpp::rclcpp
   )
+  add_executable(test_ackermann_steering test/ackermann_steering/test_ackermann_steering.cpp)
+  target_link_libraries(test_ackermann_steering PUBLIC
+    ${geometry_msgs_TARGETS}
+    rclcpp::rclcpp
+  )
   function(add_ros_isolated_launch_test path)
     set(RUNNER "${ament_cmake_ros_DIR}/run_test_isolated.py")
     add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
@@ -94,6 +100,8 @@ if(BUILD_TESTING)
     test/rrr/position.test.py)
   add_ros_isolated_launch_test(
     test/gripper/position.test.py)
+  add_ros_isolated_launch_test(
+    test/ackermann_steering/position.test.py)
 endif()
 
 pluginlib_export_plugin_description_file(hardware_interface joint_state_topic_hardware_interface_plugin_description.xml)
